@@ -13,12 +13,12 @@ resource "databricks_dbfs_file" "deployment_jar" {
   validate_remote_file = true
 }
 
-#creates seed job
-resource "databricks_job" "sample job" {
+# creates seed job
+resource "databricks_job" var.job_name {
   existing_cluster_id = var.cluster_id
-  name = join("-", ["seed-process", var.project_version])
+  name = join("-", [var.job_name, var.project_version])
   library_jar = toset([var.remote_jar_path])
-  jar_main_class_name = "InStockProcessing.SeedProcess"
+  jar_main_class_name = var.main_jar_class
   timeout_seconds = 3600
   max_retries = 1
   max_concurrent_runs = 1
